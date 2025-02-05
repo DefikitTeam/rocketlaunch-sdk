@@ -1,0 +1,15 @@
+{
+  "name": "@jupiter-swap-sdk",
+  "version": "0.0.2",
+  "description": "Typescript SDK to interact with Jupiter.",
+  "license": "MIT",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "author": "anh.devdao@gmail.com",
+  "scripts": {
+    "build": "tsc -p src"
+  },
+  "dependencies": {
+    "@solana/web3.js": "^1.95.2"
+  }
+}

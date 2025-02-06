@@ -98,8 +98,3 @@ export class RocketLaunchSdk {
         }
     }
 }
-
-
-const rks = new RocketLaunchSdk("0x5da6aa1e25bd40a78a12b5973f79c599cfa2e3a6417024820340428036c892cc")
-rks.buyToken("0x5da6aa1e25bd40a78a12b5973f79c599cfa2e3a6417024820340428036c892cc", 10, BigInt(1), "0x5da6aa1e25bd40a78a12b5973f79c599cfa2e3a6417024820340428036c892cc"
-).then(console.log).catch(console.error)

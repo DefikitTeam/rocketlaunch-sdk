@@ -8,7 +8,8 @@
     "prepublishOnly": "npm run build"
   },
   "keywords": [],
-  "author": "",
+  "types": "dist/clients/index.d.ts",
+  "author": "tbinhtrong0504@gmail.com",
   "license": "ISC",
   "description": "SDK for interacting with RocketLaunch smart contracts",
   "devDependencies": {

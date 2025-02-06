@@ -12,11 +12,14 @@ export interface LaunchPoolInputData {
     tokenForAddLP: bigint,
     tokenPerPurchase: bigint,
     maxRepeatPurchase: bigint,
-    startTime: bigint,
-    minDurationSell: bigint,
-    maxDurationSell: bigint,
+    startTime: number,
+    minDurationSell: number,
+    maxDurationSell: number,
     metadata: string,
-    numberBatch: bigint,
-    maxAmountETH: bigint,
+    numberBatch: number,
+    maxAmountETH: number,
     referrer: Address,
 }
+
+
+

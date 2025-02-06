@@ -1,16 +1,17 @@
-import { Address, getContract, PublicClient, WalletClient } from "viem";
+import { Address, getContract, PublicClient, WalletClient, WriteContractErrorType } from "viem";
 import { createViemWalletClient, createViemPublicClient, log } from "../utils";
 import { rocketLaunchABI } from "../ABIs";
-import { ROCKET_LAUNCH_CONTRACT_ADDRESS } from "../constants/constants";
+import { ChainId, PLATFORM_FEE, ROCKET_LAUNCH_CONTRACT_ADDRESS } from "../constants/constants";
 import { LaunchPoolInputData } from "../types";
+import BigNumber from "bignumber.js";
 export class RocketLaunchSdk {
     private walletClient: WalletClient;
     private publicClient: PublicClient;
     private contract: any;
 
-    constructor(privateKey: string) {
-        this.walletClient = createViemWalletClient(privateKey);
-        this.publicClient = createViemPublicClient();
+    constructor(privateKey: string, chainId: ChainId = ChainId.BARTIO) {
+        this.walletClient = createViemWalletClient(privateKey, chainId);
+        this.publicClient = createViemPublicClient(chainId);
         this.contract = getContract({
             abi: rocketLaunchABI,
             address: ROCKET_LAUNCH_CONTRACT_ADDRESS,
@@ -32,30 +33,50 @@ export class RocketLaunchSdk {
             log.info('[INFO] Transaction receipt received.', { receipt });
 
             return receipt;
-        } catch (error) {
-            log.error('[ERROR] Error creating token:', error);
-            throw error;
+        } catch (e) {
+            throw e;
         }
     }
 
     async launchPool(launchPoolInputData: LaunchPoolInputData) {
         try {
             log.info('[INFO] Launching pool...', launchPoolInputData);
-            const transaction = await this.contract.write.launchPool([
-                launchPoolInputData
-            ]);
+            if (!this.walletClient || !this.walletClient.account) {
+                throw new Error('Wallet client is not provided');
+            }
+            const chainId = await this.publicClient.getChainId();
+
+            const fee = PLATFORM_FEE[chainId as keyof typeof PLATFORM_FEE] ?? 0;
+            const value = BigInt(
+                new BigNumber(launchPoolInputData.maxAmountETH!)
+                    .plus(
+                        new BigNumber(
+                            fee
+                        ).times(1e18)
+                    )
+                    .toFixed(0)
+            )
+
+            const transaction = await this.walletClient.writeContract({
+                address: ROCKET_LAUNCH_CONTRACT_ADDRESS,
+                abi: rocketLaunchABI,
+                functionName: 'launchPool',
+                args: [launchPoolInputData],
+                value: value,
+                chain: this.publicClient.chain,
+                account: this.walletClient.account
+            })
             log.info('[INFO] Transaction sent, waiting for receipt...', { transactionHash: transaction });
             const receipt = await this.publicClient.waitForTransactionReceipt({ hash: transaction });
             log.info('[INFO] Transaction receipt received.', { receipt });
 
             return receipt;
-        } catch (error) {
-            log.error('[ERROR] Error launching pool:', error);
-            throw error;
+        } catch (e) {
+            throw e;
         }
     }
 
-    async claimToken(address:Address) {
+    async claimToken(address: Address) {
         try {
             log.info('[INFO] Claiming...', {});
             const transaction = await this.contract.write.claimToken([address]);
@@ -64,37 +85,34 @@ export class RocketLaunchSdk {
             log.info('[INFO] Transaction receipt received.', { receipt });
 
             return receipt;
-        } catch (error) {
-            log.error('[ERROR] Error claiming:', error);
-            throw error;
+        } catch (e) {
+            throw e;
         }
     }
 
     async buyToken(poolAddress: Address, numberBatch: number, maxAmountETH: bigint, referrer: Address) {
         try {
             log.info('[INFO] Buying...', {});
-            const transaction = await this.contract.write.buyToken([poolAddress, numberBatch, maxAmountETH, referrer]);
+            const transaction = await this.contract.write.buy([poolAddress, numberBatch, maxAmountETH, referrer]);
             log.info('[INFO] Transaction sent, waiting for receipt...', { transactionHash: transaction });
             const receipt = await this.publicClient.waitForTransactionReceipt({ hash: transaction });
             log.info('[INFO] Transaction receipt received.', { receipt });
             return receipt;
-        } catch (error) {
-            log.error('[ERROR] Error buying:', error);
-            throw error;
+        } catch (e) {
+            throw e;
         }
     }
 
     async sellToken(poolAddress: Address, amount: bigint) {
         try {
             log.info('[INFO] Selling...', {});
-            const transaction = await this.contract.write.sellToken([poolAddress,amount]);
+            const transaction = await this.contract.write.sell([poolAddress, amount]);
             log.info('[INFO] Transaction sent, waiting for receipt...', { transactionHash: transaction });
             const receipt = await this.publicClient.waitForTransactionReceipt({ hash: transaction });
             log.info('[INFO] Transaction receipt received.', { receipt });
             return receipt;
-        } catch (error) {
-            log.error('[ERROR] Error selling:', error);
-            throw error;
+        } catch (e) {
+            throw e;
         }
     }
 }

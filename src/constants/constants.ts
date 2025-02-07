@@ -1,9 +1,10 @@
-import { berachainTestnetbArtio, base, baseSepolia, polygonAmoy, artelaTestnet, unichainSepolia, iota } from "viem/chains";
+import { berachain,berachainTestnetbArtio, base, baseSepolia, polygonAmoy, artelaTestnet, unichainSepolia, iota } from "viem/chains";
 
 export const ROCKET_LAUNCH_CONTRACT_ADDRESS = '0x20830f96Cff2eD62dc61257BF692a13AcC9755B3';
 
 
 export enum ChainId {
+    BERACHAIN = 80094,
     BARTIO = 80084,
     BASE = 8453,
     BASE_SEPOLIA = 84532,
@@ -13,6 +14,7 @@ export enum ChainId {
     IOTA = 8822
 }
 export const PLATFORM_FEE = {
+    [ChainId.BERACHAIN]: 0.1,
     [ChainId.BASE]: 0.005,
     [ChainId.POLYGON_AMOY]: 0.005,
     [ChainId.ARTELA]: 0.005,
@@ -24,6 +26,7 @@ export const PLATFORM_FEE = {
 
 
 export const SupportedChains = {
+    [ChainId.BERACHAIN]: berachain,
     [ChainId.BARTIO]: berachainTestnetbArtio,
     [ChainId.BASE]: base,
     [ChainId.BASE_SEPOLIA]: baseSepolia,

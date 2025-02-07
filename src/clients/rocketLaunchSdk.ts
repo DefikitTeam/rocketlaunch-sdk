@@ -9,7 +9,7 @@ export class RocketLaunchSdk {
     private publicClient: PublicClient;
     private contract: any;
 
-    constructor(privateKey: string, chainId: ChainId = ChainId.BARTIO) {
+    constructor(privateKey: string, chainId: ChainId = ChainId.BERACHAIN) {
         this.walletClient = createViemWalletClient(privateKey, chainId);
         this.publicClient = createViemPublicClient(chainId);
         this.contract = getContract({

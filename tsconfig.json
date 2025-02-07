@@ -2,12 +2,9 @@
   "compilerOptions": {
     "outDir": "./dist",
     "rootDir": "./src",
-    "baseUrl": "./src",
-    "paths": {
-      "@defikit/rocketlaunch_sdk/clients/*": ["./clients/*"],
-      "@defikit/rocketlaunch_sdk/constants/*": ["./constants/*"],
-      "@defikit/rocketlaunch_sdk/types/*": ["./types/*"]
-    },
+    "declaration": true,
+    "declarationMap": true,
+    "emitDeclarationOnly": false,
     "moduleResolution": "node",
     "target": "es6",
     "module": "commonjs",

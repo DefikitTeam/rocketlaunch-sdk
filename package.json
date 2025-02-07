@@ -1,14 +1,14 @@
 {
   "name": "@defikit/rocketlaunch_sdk",
-  "version": "1.0.3",
+  "version": "1.0.5",
   "main": "dist/clients/index.js",
+  "types": "dist/clients/index.d.ts",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "tsc",
     "prepublishOnly": "npm run build"
   },
   "keywords": [],
-  "types": "dist/clients/index.d.ts",
   "author": "tbinhtrong0504@gmail.com",
   "license": "ISC",
   "description": "SDK for interacting with RocketLaunch smart contracts",
@@ -20,5 +20,22 @@
   "dependencies": {
     "bignumber.js": "^9.1.2",
     "viem": "^2.22.21"
+  },
+  "exports": {
+    ".": {
+      "import": "./dist/clients/index.js",
+      "require": "./dist/clients/index.js",
+      "types": "./dist/clients/index.d.ts"
+    },
+    "./constants": {
+      "import": "./dist/constants/index.js",
+      "require": "./dist/constants/index.js",
+      "types": "./dist/constants/index.d.ts"
+    },
+    "./types": {
+      "import": "./dist/types/index.js",
+      "require": "./dist/types/index.js",
+      "types": "./dist/types/index.d.ts"
+    }
   }
 }

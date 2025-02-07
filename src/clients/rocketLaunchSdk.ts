@@ -1,7 +1,7 @@
 import { Address, getContract, PublicClient, WalletClient, WriteContractErrorType } from "viem";
 import { createViemWalletClient, createViemPublicClient, log } from "../utils";
 import { rocketLaunchABI } from "../ABIs";
-import { ChainId, PLATFORM_FEE, ROCKET_LAUNCH_CONTRACT_ADDRESS } from "../constants/constants";
+import { ChainId, PLATFORM_FEE, ROCKET_LAUNCH_CONTRACT_ADDRESS } from "../constants";
 import { LaunchPoolInputData } from "../types";
 import BigNumber from "bignumber.js";
 export class RocketLaunchSdk {
